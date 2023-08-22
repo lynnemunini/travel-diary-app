@@ -46,6 +46,14 @@
                     android:textColor="@color/primaryTextColor"
                     android:textSize="26sp" />
 
+                <ImageView
+                    android:layout_width="400dp"
+                    android:layout_height="150dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/travel"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/signin_email_address_field"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
