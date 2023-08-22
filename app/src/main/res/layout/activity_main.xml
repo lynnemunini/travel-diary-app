@@ -6,57 +6,68 @@
     android:layout_margin="20dp">
 
     <LinearLayout
+        android:id="@+id/profile_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/main_landing_user_photo_image"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_gravity="start"
-            android:layout_marginBottom="12dp"
-            android:src="@drawable/profile" />
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/search_field"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/main_landing_user_photo_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="16dp"
-                app:boxCornerRadiusBottomEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusTopStart="15dp"
-                app:boxStrokeColor="@color/secondaryTextColor"
-                app:boxStrokeWidth="0.05dp"
-                app:boxStrokeWidthFocused="1dp"
-                app:hintEnabled="false">
+                android:src="@drawable/profile" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/search_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/search"
-                    android:drawableTint="@color/secondaryTextColor"
-                    android:fontFamily="@font/poppins_regular"
-                    android:hint="@string/search"
-                    android:maxLines="1"
-                    android:paddingTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="15sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/search"
+                app:tint="@color/secondaryTextColor" />
 
         </RelativeLayout>
 
     </LinearLayout>
+
+    <include layout="@layout/no_data_layout" />
+
+    <!--    <include layout="@layout/journal_search_no_data_layout"/>-->
+
+    <ProgressBar
+        android:id="@+id/list_loading_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/diary_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/profile_layout"
+        android:visibility="gone" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_entry_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/accentColor"
+        android:contentDescription="@string/add_entry"
+        android:src="@drawable/add_fab"
+        app:backgroundTint="@color/accentColor"
+        app:fabSize="auto" />
 
 </RelativeLayout>
