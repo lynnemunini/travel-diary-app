@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "340930630760",
+    "project_id": "travel-diary-app-35af1",
+    "storage_bucket": "travel-diary-app-35af1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340930630760:android:96857a96811b825226d7dd",
+        "android_client_info": {
+          "package_name": "com.grayseal.traveldiaryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340930630760-ogmlc6dj3e29rnkdp3vqahh2n1bl5t7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOq4ZNQqu7Ye2eAlL0cU0RqNDUiPy00xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340930630760-ogmlc6dj3e29rnkdp3vqahh2n1bl5t7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
