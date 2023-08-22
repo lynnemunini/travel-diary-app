@@ -33,7 +33,7 @@
                     android:paddingVertical="10dp">
 
                     <ImageView
-                        android:id="@+id/close_note_form"
+                        android:id="@+id/close_diary_form"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_alignParentStart="true"
@@ -46,14 +46,14 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_marginStart="20dp"
-                        android:layout_toEndOf="@+id/close_note_form"
+                        android:layout_toEndOf="@+id/close_diary_form"
                         android:fontFamily="@font/samsungsans_medium"
                         android:text="@string/write_diary"
                         android:textColor="@color/primaryTextColor"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/note_form_save_fab"
+                        android:id="@+id/save_fab"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -68,7 +68,7 @@
             </RelativeLayout>
 
             <ProgressBar
-                android:id="@+id/generic_note_form_progress_bar"
+                android:id="@+id/progress_bar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
                 android:id="@+id/date_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/generic_note_form_progress_bar"
+                android:layout_below="@+id/progress_bar"
                 android:layout_marginStart="0.5dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="0.5dp"
@@ -156,7 +156,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/note_form_capture_photos_card_view"
+                android:id="@+id/form_capture_photos_card_view"
                 android:layout_width="match_parent"
                 android:visibility="gone"
                 android:layout_height="wrap_content"
@@ -171,7 +171,7 @@
                     android:scrollbars="none">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/note_form_captured_images_recycler_view"
+                        android:id="@+id/captured_images_recycler_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -184,14 +184,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/note_form_capture_photos_card_view"
+                android:layout_below="@+id/form_capture_photos_card_view"
                 android:layout_marginStart="0.5dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="0.5dp"
                 android:layout_marginBottom="4dp">
 
                 <RelativeLayout
-                    android:id="@+id/location_layout"
+                    android:id="@+id/add_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -220,11 +220,11 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/image_layout"
+                    android:id="@+id/add_image_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@+id/location_layout">
+                    android:layout_toEndOf="@+id/add_location">
 
                     <ImageView
                         android:id="@+id/attach_images"

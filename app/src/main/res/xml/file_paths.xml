@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path name= "Travel Diary App Images"
+        path="Android/data/com.grayseal.traveldiaryapp/files/"/>
+    <external-path
+        name="external_files"
+        path="." />
+</paths>

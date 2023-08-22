@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".TravelDiaryApplication"
         android:allowBackup="true"
@@ -27,6 +32,16 @@
         <activity android:name=".ui.main.view.MainDashboardActivity" />
         <activity android:name=".ui.onboarding.view.SignInActivity" />
         <activity android:name=".ui.main.view.DiaryActivity" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.grayseal.traveldiaryapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 
