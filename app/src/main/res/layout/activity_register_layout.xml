@@ -72,7 +72,7 @@
                         android:maxLines="1"
                         android:paddingTop="15dp"
                         android:paddingBottom="15dp"
-                        android:textColor="@color/secondaryTextColor"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="15sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
