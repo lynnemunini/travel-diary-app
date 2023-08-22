@@ -65,6 +65,15 @@ dependencies {
 
     // Add the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:20.6.0'
+
+    // Room
+    implementation "androidx.room:room-runtime:2.5.2"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt "androidx.room:room-compiler:2.5.2"
+    // To use Coroutine features
+    implementation "androidx.room:room-ktx:2.5.2"
 }
 
 // Allow references to generated code
