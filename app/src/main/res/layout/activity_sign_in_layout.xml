@@ -52,7 +52,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/travel"/>
+                    android:src="@drawable/luggage"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/signin_email_address_field"

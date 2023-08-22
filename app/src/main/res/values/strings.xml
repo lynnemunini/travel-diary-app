@@ -12,4 +12,10 @@
     <string name="search">Search...</string>
     <string name="add_entry">Add Entry</string>
     <string name="start_recording_your_memories_to_see_them_here">Start recording your memories to see them here!</string>
+    <string name="write_diary">Write diary</string>
+    <string name="save">Save</string>
+    <string name="title">Title</string>
+    <string name="dear_diary">Dear diary,</string>
+    <string name="tag_location">Tag location</string>
+    <string name="attach_images">Attach images</string>
 </resources>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="?attr/actionBarSize"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:id="@+id/form_container_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/app_bar_top"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
+
+                <RelativeLayout
+                    android:id="@+id/top_bar_holder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="10dp">
+
+                    <ImageView
+                        android:id="@+id/close_note_form"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_action_close"
+                        app:tint="@color/primaryTextColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toEndOf="@+id/close_note_form"
+                        android:fontFamily="@font/samsungsans_medium"
+                        android:text="@string/write_diary"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/note_form_save_fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/save"
+                        android:textColor="@color/accentColor"
+                        android:textSize="20sp" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <ProgressBar
+                android:id="@+id/generic_note_form_progress_bar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/app_bar_top"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:indeterminate="true"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/generic_note_form_progress_bar"
+                android:layout_marginStart="0.5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="0.5dp"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:id="@+id/date_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Mon 12, 2023"
+                    android:textColor="@color/accentColor"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@+id/date_text_view"
+                    android:src="@drawable/calendar"
+                    app:tint="@color/accentColor" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/note_form_inputs_card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/date_layout"
+                android:layout_marginStart="0.5dp"
+                android:layout_marginEnd="0.5dp"
+                android:layout_marginBottom="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/note_title_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@null"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins_medium"
+                        android:hint="@string/title"
+                        android:maxLines="2"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/note_body_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@null"
+                        android:fontFamily="@font/poppins_regular"
+                        android:hint="@string/dear_diary"
+                        android:paddingBottom="52dp"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/note_form_capture_photos_card_view"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/note_form_inputs_card_view"
+                android:layout_marginStart="0.5dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="0.5dp">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/note_form_captured_images_recycler_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:scrollbars="none" />
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/note_form_capture_photos_card_view"
+                android:layout_marginStart="0.5dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="0.5dp"
+                android:layout_marginBottom="4dp">
+
+                <RelativeLayout
+                    android:id="@+id/location_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:id="@+id/location_tag"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/add_location"
+                        app:tint="@color/accentColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="6dp"
+                        android:layout_toEndOf="@+id/location_tag"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/tag_location"
+                        android:textColor="@color/accentColor"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/image_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/location_layout">
+
+                    <ImageView
+                        android:id="@+id/attach_images"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/add_photo"
+                        app:tint="@color/accentColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="6dp"
+                        android:layout_toEndOf="@+id/attach_images"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/attach_images"
+                        android:textColor="@color/accentColor"
+                        android:textSize="14sp" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>
