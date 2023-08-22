@@ -13,8 +13,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.grayseal.traveldiaryapp.MainActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.grayseal.traveldiaryapp.R
+import com.grayseal.traveldiaryapp.ui.main.view.MainDashboardActivity
 import com.grayseal.traveldiaryapp.ui.onboarding.viewmodel.RegisterViewModel
 import com.grayseal.traveldiaryapp.ui.onboarding.viewmodel.RegistrationResult
 
@@ -29,9 +30,18 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register_layout)
-        viewModel = ViewModelProvider(this@RegisterActivity)[RegisterViewModel::class.java]
-        initializeResources()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        if (currentUser != null) {
+            // User is already authenticated, navigate to the MainDashboardActivity
+            val intent = Intent(this, MainDashboardActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            setContentView(R.layout.activity_register_layout)
+            viewModel = ViewModelProvider(this@RegisterActivity)[RegisterViewModel::class.java]
+            initializeResources()
+        }
     }
 
     private fun initializeResources() {
@@ -50,7 +60,7 @@ class RegisterActivity : AppCompatActivity() {
                 when (result) {
                     is RegistrationResult.Success -> {
                         // Registration successful, handle navigation
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, MainDashboardActivity::class.java)
                         startActivity(intent)
                         finish()
                     }

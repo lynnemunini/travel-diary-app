@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.grayseal.traveldiaryapp.MainActivity
 import com.grayseal.traveldiaryapp.R
+import com.grayseal.traveldiaryapp.ui.main.view.MainDashboardActivity
 import com.grayseal.traveldiaryapp.ui.onboarding.viewmodel.SignInResult
 import com.grayseal.traveldiaryapp.ui.onboarding.viewmodel.SignInViewModel
 
@@ -52,7 +52,7 @@ class SignInActivity : AppCompatActivity() {
                 when (result) {
                     is SignInResult.Success -> {
                         // Sign-in successful, handle navigation to main dashboard
-                        val intent = Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, MainDashboardActivity::class.java)
                         startActivity(intent)
                         finish()
                     }

@@ -74,6 +74,8 @@ dependencies {
     kapt "androidx.room:room-compiler:2.5.2"
     // To use Coroutine features
     implementation "androidx.room:room-ktx:2.5.2"
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }
 
 // Allow references to generated code

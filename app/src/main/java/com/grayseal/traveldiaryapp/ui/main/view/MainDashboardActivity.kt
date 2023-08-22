@@ -1,10 +1,10 @@
-package com.grayseal.traveldiaryapp
+package com.grayseal.traveldiaryapp.ui.main.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.grayseal.traveldiaryapp.R
 
-class MainActivity : AppCompatActivity() {
+class MainDashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
