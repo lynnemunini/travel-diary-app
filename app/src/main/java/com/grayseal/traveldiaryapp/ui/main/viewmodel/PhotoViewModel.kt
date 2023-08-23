@@ -25,7 +25,7 @@ class PhotoViewModel @Inject constructor(private val repository: PhotoRepository
         }
     }
 
-    suspend fun getAllEntries(): Flow<List<Photo>> {
+    fun getAllEntries(): Flow<List<Photo>> {
         return repository.getAllEntries()
     }
 }

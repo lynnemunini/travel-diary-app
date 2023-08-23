@@ -183,5 +183,6 @@ class DiaryActivity : AppCompatActivity() {
 
     companion object {
         private const val GET_CONTENT_FROM_FILE_REQUEST_CODE = 1203
+        const val ENTRY_ID_TAG_KEY = "entry_id_key"
     }
 }

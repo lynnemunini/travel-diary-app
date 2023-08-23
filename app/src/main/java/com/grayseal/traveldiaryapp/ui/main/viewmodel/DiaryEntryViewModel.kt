@@ -37,7 +37,7 @@ class DiaryEntryViewModel @Inject constructor (private val repository: DiaryEntr
         }
     }
 
-    suspend fun getAllEntries(): Flow<List<DiaryEntry>> {
+    fun getAllEntries(): Flow<List<DiaryEntry>> {
         return repository.getAllEntries()
     }
 }

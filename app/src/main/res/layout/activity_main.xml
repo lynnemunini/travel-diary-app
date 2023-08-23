@@ -52,8 +52,6 @@
 
     <include layout="@layout/no_data_layout" />
 
-    <!--    <include layout="@layout/journal_search_no_data_layout"/>-->
-
     <ProgressBar
         android:id="@+id/list_loading_progress"
         android:layout_width="match_parent"
@@ -67,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/profile_layout"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
