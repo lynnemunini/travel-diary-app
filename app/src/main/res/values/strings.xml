@@ -18,4 +18,5 @@
     <string name="dear_diary">Dear diary,</string>
     <string name="tag_location">Tag location</string>
     <string name="attach_images">Attach images</string>
+    <string name="sort_by_date">Sort by Date</string>
 </resources>

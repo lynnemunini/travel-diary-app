@@ -5,8 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Gravity
+import android.view.MenuInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +40,7 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
     private lateinit var statusProgressBar: ProgressBar
     private lateinit var noDataView: View
     private lateinit var searchEditText: EditText
+    private lateinit var sortMenuIcon: ImageView
     private lateinit var diaryListAdapter: DiaryListAdapter
     private val photoViewModel: PhotoViewModel by viewModels()
     private val diaryEntryViewModel: DiaryEntryViewModel by viewModels()
@@ -72,6 +77,7 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         diaryEntriesListRecyclerView = findViewById(R.id.diary_recycler_view)
         searchEditText = findViewById(R.id.search_edit_text)
         noDataView = findViewById(R.id.diary_no_data_view)
+        sortMenuIcon = findViewById(R.id.sort_icon)
         diaryListAdapter = DiaryListAdapter(applicationContext, entries, images, this)
         diaryEntriesListRecyclerView.adapter = diaryListAdapter
         diaryEntriesListRecyclerView.layoutManager = LinearLayoutManager(applicationContext)
@@ -86,6 +92,7 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
                 if (searchEditText.text.isNotEmpty()) diaryListAdapter.search(searchEditText.text.toString()) else loadData()
             }
         })
+        sortMenuIcon.setOnClickListener { v -> showContextMenu(v) }
     }
 
     private fun loadData() {
@@ -122,6 +129,23 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         } else {
             diaryEntriesListRecyclerView.visibility = View.VISIBLE
         }
+    }
+
+    private fun showContextMenu(view: View) {
+        val popup = PopupMenu(this, view, Gravity.END)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.sort_menu, popup.menu)
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_sort_by_date -> {
+                    // Handle sorting by date
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popup.show()
     }
 
     override fun onEntryClickedClicked(position: Int) {

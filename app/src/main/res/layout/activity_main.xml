@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="20dp">
@@ -16,12 +17,24 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp">
 
+            <ImageView
+                android:id="@+id/sort_icon"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/more"
+                app:tint="@color/primaryTextColor" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/search_field"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/sort_icon"
                 app:boxCornerRadiusBottomEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
                 app:boxCornerRadiusTopEnd="15dp"
@@ -35,22 +48,21 @@
                     android:id="@+id/search_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/search"
                     android:fontFamily="@font/poppins_regular"
                     android:hint="@string/search"
-                    android:drawableEnd="@drawable/search"
-                    android:maxLines="1"
-                    android:paddingTop="10dp"
                     android:imeOptions="actionDone"
                     android:inputType="text"
+                    android:maxLines="1"
+                    android:paddingTop="10dp"
                     android:paddingBottom="10dp"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="15sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
         </RelativeLayout>
-
     </LinearLayout>
+
 
     <include layout="@layout/no_data_layout" />
 
@@ -58,9 +70,9 @@
         android:id="@+id/list_loading_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/diary_recycler_view"
