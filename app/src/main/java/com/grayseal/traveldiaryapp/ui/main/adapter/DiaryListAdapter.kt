@@ -29,36 +29,58 @@ class DiaryListAdapter(
         searchableCopy.addAll(entryList)
     }
 
+    /**
+     * Performs a search operation based on the given search term and updates the entry list accordingly.
+     *
+     * @param searchTerm The search term to be used for filtering entries.
+     */
     fun search(searchTerm: String?) {
+        // Clear the current entry list
         entryList.clear()
+
         if (searchTerm != null) {
-            if (searchTerm.isEmpty()) entryList.addAll(searchableCopy) else {
+            // Check if the search term is empty
+            if (searchTerm.isEmpty()) {
+                // Add all entries from the searchable copy since there's no filter
+                entryList.addAll(searchableCopy)
+            } else {
+                // Iterate through each diary entry in the searchable copy
                 for (diaryEntry in searchableCopy) {
+                    // Check if the search term matches any part of the entry's data
                     if (diaryEntry.title.lowercase(Locale.getDefault()).contains(
-                            searchTerm.lowercase(
-                                Locale.getDefault()
-                            )
+                            searchTerm.lowercase(Locale.getDefault())
                         ) || diaryEntry.notes.lowercase(Locale.getDefault()).contains(
-                            searchTerm.lowercase(
-                                Locale.getDefault()
-                            )
+                            searchTerm.lowercase(Locale.getDefault())
+                        ) || diaryEntry.location.lowercase(Locale.getDefault()).contains(
+                            searchTerm.lowercase(Locale.getDefault())
                         )
                     ) {
-                        if (entryList.isEmpty()) entryList.add(diaryEntry) else {
+                        if (entryList.isEmpty()) {
+                            // If the entry list is empty, directly add the matched entry
+                            entryList.add(diaryEntry)
+                        } else {
                             var alreadyExists = false
+                            // Check if the entry already exists in the entry list
                             for (entry in entryList) {
                                 if (diaryEntry.id == entry.id) {
                                     alreadyExists = true
                                     break
                                 }
                             }
-                            if (!alreadyExists) entryList.add(diaryEntry)
+                            // Add the entry to the list if it doesn't already exist
+                            if (!alreadyExists) {
+                                entryList.add(diaryEntry)
+                            }
                         }
                     }
                 }
             }
         }
+
+        // Post an event to notify about the search result
         EventBus.getDefault().post(SearchResultEvent(entryList.isEmpty()))
+
+        // Notify the adapter about the data change
         notifyDataSetChanged()
     }
 
