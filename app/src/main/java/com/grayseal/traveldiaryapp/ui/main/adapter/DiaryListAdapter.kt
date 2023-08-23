@@ -14,8 +14,6 @@ import com.grayseal.traveldiaryapp.data.model.DiaryEntry
 import com.grayseal.traveldiaryapp.data.model.Photo
 import com.grayseal.traveldiaryapp.ui.main.eventbus.SearchResultEvent
 import org.greenrobot.eventbus.EventBus
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 @SuppressLint("NotifyDataSetChanged")
@@ -73,7 +71,6 @@ class DiaryListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val diaryEntry = entryList[position]
         val date = diaryEntry.date
-
         val entryId = diaryEntry.id
         val entryImages = imagesList.filter { it.diaryEntryId == entryId }
 

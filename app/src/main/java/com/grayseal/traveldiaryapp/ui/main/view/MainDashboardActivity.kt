@@ -100,6 +100,8 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
                     diaryEntriesListRecyclerView.visibility = View.GONE
                 }
             }
+        }
+        lifecycleScope.launch {
             photoViewModel.getAllEntries().collect { photos ->
                 images.clear()
                 images.addAll(photos)

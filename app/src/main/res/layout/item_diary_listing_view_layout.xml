@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
+    android:layout_marginHorizontal="0.5dp"
     app:cardCornerRadius="14dp">
 
     <LinearLayout
@@ -64,19 +65,37 @@
                 android:fontFamily="@font/poppins_regular"
                 android:maxLines="1"
                 android:textColor="@color/secondaryTextColor"
-                android:textSize="16sp" />
+                android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/item_location_text_view"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/poppins_regular"
-                android:maxLength="3"
-                android:maxLines="1"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="16sp" />
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    android:id="@+id/location_image"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/location"
+                    app:tint="@color/secondaryTextColor" />
+
+                <TextView
+                    android:id="@+id/item_location_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="6dp"
+                    android:layout_toEndOf="@+id/location_image"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_regular"
+                    android:maxLines="1"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="13sp" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
 
