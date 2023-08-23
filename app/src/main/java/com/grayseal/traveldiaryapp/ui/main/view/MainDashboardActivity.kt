@@ -31,6 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 @SuppressLint("NotifyDataSetChanged")
@@ -138,7 +140,15 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_sort_by_date -> {
-                    // Handle sorting by date
+                    val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+
+                    // Convert date strings to Date objects and sort entries in descending order
+                    entries.sortWith { entry1, entry2 ->
+                        val date1 = dateFormat.parse(entry1.date)
+                        val date2 = dateFormat.parse(entry2.date)
+                        date2!!.compareTo(date1!!)
+                    }
+                    diaryListAdapter.notifyDataSetChanged()
                     true
                 }
 
