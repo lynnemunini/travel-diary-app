@@ -40,6 +40,8 @@
                     android:drawableEnd="@drawable/search"
                     android:maxLines="1"
                     android:paddingTop="10dp"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
                     android:paddingBottom="10dp"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="15sp" />

@@ -3,7 +3,10 @@ package com.grayseal.traveldiaryapp.ui.main.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +34,7 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
     private lateinit var diaryEntriesListRecyclerView: RecyclerView
     private lateinit var statusProgressBar: ProgressBar
     private lateinit var noDataView: View
+    private lateinit var searchEditText: EditText
     private lateinit var diaryListAdapter: DiaryListAdapter
     private val photoViewModel: PhotoViewModel by viewModels()
     private val diaryEntryViewModel: DiaryEntryViewModel by viewModels()
@@ -65,6 +69,7 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         addDiaryEntryFab = findViewById(R.id.add_entry_fab)
         statusProgressBar = findViewById(R.id.list_loading_progress)
         diaryEntriesListRecyclerView = findViewById(R.id.diary_recycler_view)
+        searchEditText = findViewById(R.id.search_edit_text)
         noDataView = findViewById(R.id.diary_no_data_view)
         diaryListAdapter = DiaryListAdapter(applicationContext, entries, images, this)
         diaryEntriesListRecyclerView.adapter = diaryListAdapter
@@ -73,14 +78,13 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
             startActivity(Intent(this@MainDashboardActivity, DiaryActivity::class.java))
             finish()
         }
-    }
-
-    fun emptySearchResult(isEmpty: Boolean) {
-        if (isEmpty) {
-            diaryEntriesListRecyclerView.visibility = View.GONE
-        } else {
-            diaryEntriesListRecyclerView.visibility = View.VISIBLE
-        }
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                if (searchEditText.text.isNotEmpty()) diaryListAdapter.search(searchEditText.text.toString()) else loadData()
+            }
+        })
     }
 
     private fun loadData() {
