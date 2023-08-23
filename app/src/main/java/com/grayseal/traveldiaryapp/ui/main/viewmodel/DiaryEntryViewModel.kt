@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grayseal.traveldiaryapp.data.model.DiaryEntry
 import com.grayseal.traveldiaryapp.data.repository.DiaryEntryRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DiaryEntryViewModel(private val repository: DiaryEntryRepository) : ViewModel() {
+@HiltViewModel
+class DiaryEntryViewModel @Inject constructor (private val repository: DiaryEntryRepository) : ViewModel() {
 
     fun addEntry(diaryEntry: DiaryEntry) {
         viewModelScope.launch(Dispatchers.IO) {

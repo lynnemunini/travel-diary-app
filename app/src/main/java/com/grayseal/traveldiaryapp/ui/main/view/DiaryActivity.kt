@@ -1,5 +1,7 @@
 package com.grayseal.traveldiaryapp.ui.main.view
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -8,6 +10,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +18,10 @@ import com.grayseal.traveldiaryapp.R
 import com.grayseal.traveldiaryapp.data.model.DiaryEntry
 import com.grayseal.traveldiaryapp.data.model.Photo
 import com.grayseal.traveldiaryapp.ui.main.adapter.ImagesListAdapter
+import com.grayseal.traveldiaryapp.ui.main.viewmodel.DiaryEntryViewModel
+import com.grayseal.traveldiaryapp.ui.main.viewmodel.PhotoViewModel
 import com.grayseal.traveldiaryapp.utils.ProcessAndroidUri
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -23,13 +29,17 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 
+
+@SuppressLint("NotifyDataSetChanged")
+@AndroidEntryPoint
 class DiaryActivity : AppCompatActivity() {
 
+    private val photoViewModel: PhotoViewModel by viewModels()
+    private val diaryEntryViewModel: DiaryEntryViewModel by viewModels()
     private lateinit var closeDiaryForm: ImageView
     private lateinit var saveButton: TextView
     private lateinit var dateTextView: TextView
-
-    //    private lateinit var dateLayout: View
+    private lateinit var dateLayout: View
     private lateinit var titleEditText: EditText
     private lateinit var entryBodyEditText: EditText
     private lateinit var progressBar: ProgressBar
@@ -40,7 +50,8 @@ class DiaryActivity : AppCompatActivity() {
     private lateinit var imagesListAdapter: ImagesListAdapter
     private lateinit var capturedImagesContainerView: View
     private var imageFile: File? = null
-    private lateinit var currentDate: Calendar
+    private var currentDate: Calendar = Calendar.getInstance()
+    private var selectedDate = currentDate.time
     private var diaryEntryID: UUID = UUID.randomUUID()
     private var diaryEntry: DiaryEntry? = null
     private val imageFilesList: MutableList<Photo> = ArrayList()
@@ -55,6 +66,7 @@ class DiaryActivity : AppCompatActivity() {
         closeDiaryForm = findViewById(R.id.close_diary_form)
         saveButton = findViewById(R.id.save_fab)
         dateTextView = findViewById(R.id.date_text_view)
+        dateLayout = findViewById(R.id.date_layout)
         titleEditText = findViewById(R.id.note_title_edit_text)
         entryBodyEditText = findViewById(R.id.note_body_edit_text)
         addImageView = findViewById(R.id.add_image_view)
@@ -69,15 +81,37 @@ class DiaryActivity : AppCompatActivity() {
         capturedImagesRecyclerView.adapter = imagesListAdapter
         capturedImagesRecyclerView.layoutManager = GridLayoutManager(applicationContext, 3)
         dateTextView.text =
-            SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(currentDate.time)
+            SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(selectedDate)
 
         closeDiaryForm.setOnClickListener {
             onBackPressed()
         }
         saveButton.setOnClickListener {
+            handleSaveDiaryEntry()
         }
 
         addImageView.setOnClickListener { launchImageCapture() }
+
+        dateLayout.setOnClickListener {
+            DatePickerDialog(
+                this@DiaryActivity,
+                { _, year, month, dayOfMonth ->
+                    currentDate = Calendar.getInstance()
+                    currentDate.set(Calendar.MONTH, month)
+                    currentDate.set(Calendar.YEAR, year)
+                    currentDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                    selectedDate = currentDate.time
+                    dateTextView.text = SimpleDateFormat(
+                        "MMMM dd, yyyy",
+                        Locale.getDefault()
+                    ).format(selectedDate)
+                },
+                currentDate.get(Calendar.YEAR),
+                currentDate.get(Calendar.MONTH),
+                currentDate.get(Calendar.DAY_OF_MONTH) + 1
+            )
+                .show()
+        }
     }
 
     private fun launchImageCapture() {
@@ -109,7 +143,8 @@ class DiaryActivity : AppCompatActivity() {
                             Photo(id = UUID.randomUUID(), diaryEntryId = diaryEntryID, it)
                         }
 
-                    // TODO: Store the diaryEntry Image
+                    // Store the image
+                    diaryEntryImage?.let { photoViewModel.addEntry(diaryEntryImage) }
 
                     capturedImagesContainerView.visibility = View.VISIBLE
                     diaryEntryImage?.let { imageFilesList.add(it) }
@@ -118,6 +153,26 @@ class DiaryActivity : AppCompatActivity() {
                     e.printStackTrace()
                 }
             }
+        }
+    }
+
+    private fun handleSaveDiaryEntry() {
+        if (titleEditText.text.toString().isEmpty()) {
+            Toast.makeText(applicationContext, "Title must not be empty!", Toast.LENGTH_LONG).show()
+        } else if (entryBodyEditText.text.toString().isEmpty()) {
+            Toast.makeText(applicationContext, "Enter notes!", Toast.LENGTH_LONG).show()
+        } else {
+            diaryEntry = DiaryEntry(
+                diaryEntryID,
+                titleEditText.text.toString(),
+                dateTextView.text.toString(),
+                "",
+                entryBodyEditText.text.toString()
+            )
+            diaryEntry?.let { entry ->
+                diaryEntryViewModel.addEntry(entry)
+            }
+            onBackPressed()
         }
     }
 
