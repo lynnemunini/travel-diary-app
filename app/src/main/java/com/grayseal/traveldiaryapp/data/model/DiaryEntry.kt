@@ -10,7 +10,7 @@ import java.util.UUID
 @Entity(tableName = "diary_entries")
 data class DiaryEntry(
     @PrimaryKey
-    val id: UUID = UUID.randomUUID(),
+    val id: String = UUID.randomUUID().toString(),
 
     @ColumnInfo(name = "title")
     val title: String,

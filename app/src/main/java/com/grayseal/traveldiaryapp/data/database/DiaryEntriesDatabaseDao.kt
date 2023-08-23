@@ -19,7 +19,7 @@ interface DiaryEntriesDatabaseDao {
 
     /*Return diaryEntry with a specific id*/
     @Query("SELECT * from diary_entries where id =:id")
-    suspend fun getDiaryEntryById(id: String): DiaryEntry
+    fun getDiaryEntryById(id: String): Flow<DiaryEntry>
 
     /*Insert an entry to database. If there's any conflict or errors it's replaced with new one*/
     @Insert(onConflict = OnConflictStrategy.REPLACE)

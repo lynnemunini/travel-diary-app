@@ -15,6 +15,10 @@ class DiaryEntryRepository @Inject constructor(private val diaryEntriesDatabaseD
         diaryEntriesDatabaseDao.deleteDiaryEntry(diaryEntry)
 
     suspend fun deleteAllEntries() = diaryEntriesDatabaseDao.deleteAll()
+
+    fun getEntryById(entryId: String): Flow<DiaryEntry> =
+        diaryEntriesDatabaseDao.getDiaryEntryById(entryId).flowOn(Dispatchers.IO).conflate()
+
     fun getAllEntries(): Flow<List<DiaryEntry>> =
         diaryEntriesDatabaseDao.getDiaryEntries().flowOn(
             Dispatchers.IO

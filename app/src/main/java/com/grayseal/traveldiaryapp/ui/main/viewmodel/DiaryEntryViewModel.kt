@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DiaryEntryViewModel @Inject constructor (private val repository: DiaryEntryRepository) : ViewModel() {
+class DiaryEntryViewModel @Inject constructor(private val repository: DiaryEntryRepository) :
+    ViewModel() {
 
     fun addEntry(diaryEntry: DiaryEntry) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -36,6 +37,8 @@ class DiaryEntryViewModel @Inject constructor (private val repository: DiaryEntr
             repository.deleteAllEntries()
         }
     }
+
+    fun getEntryById(entryId: String): Flow<DiaryEntry> = repository.getEntryById(entryId)
 
     fun getAllEntries(): Flow<List<DiaryEntry>> {
         return repository.getAllEntries()

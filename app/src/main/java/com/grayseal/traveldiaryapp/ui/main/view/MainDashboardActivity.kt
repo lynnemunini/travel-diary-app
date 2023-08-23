@@ -20,6 +20,7 @@ import com.grayseal.traveldiaryapp.data.model.Photo
 import com.grayseal.traveldiaryapp.ui.main.adapter.DiaryListAdapter
 import com.grayseal.traveldiaryapp.ui.main.eventbus.SearchResultEvent
 import com.grayseal.traveldiaryapp.ui.main.view.DiaryActivity.Companion.ENTRY_ID_TAG_KEY
+import com.grayseal.traveldiaryapp.ui.main.view.DiaryActivity.Companion.IS_VIEW_DETAILED
 import com.grayseal.traveldiaryapp.ui.main.viewmodel.DiaryEntryViewModel
 import com.grayseal.traveldiaryapp.ui.main.viewmodel.PhotoViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -127,6 +128,7 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         val entry = entries[position]
         val intent = Intent(applicationContext, DiaryActivity::class.java)
         intent.putExtra(ENTRY_ID_TAG_KEY, entry.id)
+        intent.putExtra(IS_VIEW_DETAILED, true)
         startActivity(intent)
         finish()
     }

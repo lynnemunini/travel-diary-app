@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.grayseal.traveldiaryapp.R
@@ -22,6 +23,7 @@ import com.grayseal.traveldiaryapp.ui.main.viewmodel.DiaryEntryViewModel
 import com.grayseal.traveldiaryapp.ui.main.viewmodel.PhotoViewModel
 import com.grayseal.traveldiaryapp.utils.ProcessAndroidUri
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -52,7 +54,7 @@ class DiaryActivity : AppCompatActivity() {
     private var imageFile: File? = null
     private var currentDate: Calendar = Calendar.getInstance()
     private var selectedDate = currentDate.time
-    private var diaryEntryID: UUID = UUID.randomUUID()
+    private var diaryEntryID: String = UUID.randomUUID().toString()
     private var diaryEntry: DiaryEntry? = null
     private val imageFilesList: MutableList<Photo> = ArrayList()
 
@@ -60,6 +62,8 @@ class DiaryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diary_layout)
         initializeResources()
+        loadData()
+//        handleLoadImageFiles()
     }
 
     private fun initializeResources() {
@@ -114,6 +118,21 @@ class DiaryActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadData() {
+        if (intent.getBooleanExtra(IS_VIEW_DETAILED, false)) {
+            diaryEntryID = intent.getStringExtra(ENTRY_ID_TAG_KEY).toString()
+
+            lifecycleScope.launch {
+                diaryEntryViewModel.getEntryById(diaryEntryID).collect { fetchedDiaryEntry ->
+                    diaryEntry = fetchedDiaryEntry
+                    titleEditText.setText(fetchedDiaryEntry.title)
+                    entryBodyEditText.setText(fetchedDiaryEntry.notes)
+                    dateTextView.text = fetchedDiaryEntry.date
+                }
+            }
+        }
+    }
+
     private fun launchImageCapture() {
         handleChoosePhotoFromFiles()
     }
@@ -140,7 +159,11 @@ class DiaryActivity : AppCompatActivity() {
                     if (imageFile?.length()!! < 1) return
                     val diaryEntryImage =
                         imageFile?.absolutePath?.let {
-                            Photo(id = UUID.randomUUID(), diaryEntryId = diaryEntryID, it)
+                            Photo(
+                                id = UUID.randomUUID().toString(),
+                                diaryEntryId = diaryEntryID,
+                                it
+                            )
                         }
 
                     // Store the image
@@ -184,5 +207,6 @@ class DiaryActivity : AppCompatActivity() {
     companion object {
         private const val GET_CONTENT_FROM_FILE_REQUEST_CODE = 1203
         const val ENTRY_ID_TAG_KEY = "entry_id_key"
+        const val IS_VIEW_DETAILED = "view_in_detailed"
     }
 }
