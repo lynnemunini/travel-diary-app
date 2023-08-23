@@ -63,7 +63,6 @@ class DiaryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_diary_layout)
         initializeResources()
         loadData()
-//        handleLoadImageFiles()
     }
 
     private fun initializeResources() {
@@ -128,6 +127,16 @@ class DiaryActivity : AppCompatActivity() {
                     titleEditText.setText(fetchedDiaryEntry.title)
                     entryBodyEditText.setText(fetchedDiaryEntry.notes)
                     dateTextView.text = fetchedDiaryEntry.date
+                }
+            }
+
+            lifecycleScope.launch {
+                photoViewModel.getAllEntries().collect { photos ->
+                    photos.filter { it.diaryEntryId == diaryEntryID }
+                    imageFilesList.clear()
+                    capturedImagesContainerView.visibility = View.VISIBLE
+                    imageFilesList.addAll(photos)
+                    imagesListAdapter.notifyDataSetChanged()
                 }
             }
         }
