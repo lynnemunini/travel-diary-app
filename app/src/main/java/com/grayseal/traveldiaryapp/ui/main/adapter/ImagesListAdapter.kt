@@ -1,7 +1,6 @@
 package com.grayseal.traveldiaryapp.ui.main.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import com.grayseal.traveldiaryapp.R
 import com.grayseal.traveldiaryapp.data.model.Photo
 import com.squareup.picasso.Picasso
 import java.io.File
-
 
 class ImagesListAdapter(
     private val context: Context,

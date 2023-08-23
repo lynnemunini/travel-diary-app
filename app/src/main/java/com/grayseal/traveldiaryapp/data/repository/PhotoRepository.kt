@@ -13,9 +13,8 @@ class PhotoRepository @Inject constructor(private val photoDatabaseDao: PhotoDat
     suspend fun deleteEntry(photo: Photo) =
         photoDatabaseDao.deletePhoto(photo)
 
-    suspend fun getAllEntries(): Flow<List<Photo>> =
+    fun getAllEntries(): Flow<List<Photo>> =
         photoDatabaseDao.getPhotoEntries().flowOn(
             Dispatchers.IO
         ).conflate()
-
 }
