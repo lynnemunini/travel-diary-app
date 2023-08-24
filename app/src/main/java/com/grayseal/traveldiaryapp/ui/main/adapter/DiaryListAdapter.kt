@@ -115,7 +115,7 @@ class DiaryListAdapter(
         searchableCopy.addAll(journals!!)
     }
 
-    inner class ViewHolder(itemView: View, onJournalClickedListener: OnEntryClickedListener) :
+    inner class ViewHolder(itemView: View, entryClickedListener: OnEntryClickedListener) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val container: MaterialCardView
         val titleTextView: TextView
@@ -132,16 +132,16 @@ class DiaryListAdapter(
             locationTextView = itemView.findViewById(R.id.item_location_text_view)
             dateTextView = itemView.findViewById(R.id.item_date_text_view)
             imagesRecyclerView = itemView.findViewById(R.id.entry_images_recycler_view)
-            this.entryClickedListener = onJournalClickedListener
+            this.entryClickedListener = entryClickedListener
             container.setOnClickListener(this)
         }
 
         override fun onClick(view: View) {
-            this.entryClickedListener.onEntryClickedClicked(adapterPosition)
+            this.entryClickedListener.onEntryClicked(adapterPosition)
         }
     }
 
     interface OnEntryClickedListener {
-        fun onEntryClickedClicked(position: Int)
+        fun onEntryClicked(position: Int)
     }
 }

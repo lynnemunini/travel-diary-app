@@ -158,7 +158,7 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         popup.show()
     }
 
-    override fun onEntryClickedClicked(position: Int) {
+    override fun onEntryClicked(position: Int) {
         val entry = entries[position]
         val intent = Intent(applicationContext, DiaryActivity::class.java)
         intent.putExtra(ENTRY_ID_TAG_KEY, entry.id)

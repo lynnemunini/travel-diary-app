@@ -1,9 +1,15 @@
 package com.grayseal.traveldiaryapp.ui.main.view
 
+import LocationAdapter
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -13,8 +19,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.grayseal.traveldiaryapp.R
 import com.grayseal.traveldiaryapp.data.model.DiaryEntry
 import com.grayseal.traveldiaryapp.data.model.Photo
@@ -45,6 +57,8 @@ class DiaryActivity : AppCompatActivity() {
     private lateinit var titleEditText: EditText
     private lateinit var entryBodyEditText: EditText
     private lateinit var progressBar: ProgressBar
+    private lateinit var locationDialog: AlertDialog
+    private lateinit var locationTextView: TextView
     private lateinit var addImageView: View
     private lateinit var addLocationView: View
     private lateinit var containerView: View
@@ -57,9 +71,11 @@ class DiaryActivity : AppCompatActivity() {
     private var diaryEntryID: String = UUID.randomUUID().toString()
     private var diaryEntry: DiaryEntry? = null
     private val imageFilesList: MutableList<Photo> = ArrayList()
+    private val locationList: MutableList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Places.initialize(applicationContext, "BuildConfig.MAPS_API_KEY")
         setContentView(R.layout.activity_diary_layout)
         initializeResources()
         loadData()
@@ -74,6 +90,7 @@ class DiaryActivity : AppCompatActivity() {
         entryBodyEditText = findViewById(R.id.note_body_edit_text)
         addImageView = findViewById(R.id.add_image_view)
         progressBar = findViewById(R.id.progress_bar)
+        locationTextView = findViewById(R.id.location)
         addLocationView = findViewById(R.id.add_location)
         containerView = findViewById(R.id.form_container_view)
         capturedImagesContainerView = findViewById(R.id.form_capture_photos_card_view)
@@ -114,6 +131,89 @@ class DiaryActivity : AppCompatActivity() {
                 currentDate.get(Calendar.DAY_OF_MONTH) + 1
             )
                 .show()
+        }
+
+        // Location Dialog
+        val dialogView = layoutInflater.inflate(R.layout.add_location_dialog, null)
+        val locationNameEditText =
+            dialogView.findViewById<EditText>(R.id.search_edit_text)
+        val locationRecyclerView =
+            dialogView.findViewById<RecyclerView>(R.id.location_recycler_view)
+        val loadingProgressBar = dialogView.findViewById<ProgressBar>(R.id.loading_progress_bar)
+        val closePopUpView = dialogView.findViewById<ImageView>(R.id.close_pop_up_view)
+
+        closePopUpView.setOnClickListener {
+            locationDialog.dismiss()
+        }
+
+        val builder = AlertDialog.Builder(this)
+        builder.setView(dialogView)
+        locationDialog = builder.create()
+        locationDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        addLocationView.setOnClickListener {
+            locationDialog.show()
+
+            val locationAdapter =
+                LocationAdapter(locationList, object : LocationAdapter.OnLocationClickedListener {
+                    override fun onLocationClicked(position: Int) {
+                        locationTextView.text = locationList[position]
+                        locationDialog.dismiss()
+                    }
+                })
+            locationRecyclerView.layoutManager = LinearLayoutManager(this)
+            locationRecyclerView.adapter = locationAdapter
+
+            val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
+            locationRecyclerView.addItemDecoration(dividerItemDecoration)
+
+            // Initialize the Places SDK client
+            val placesClient: PlacesClient = Places.createClient(this)
+
+            locationNameEditText.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                    val query = s.toString()
+                    loadingProgressBar.visibility = View.VISIBLE
+
+                    // Make a FindAutocompletePredictionsRequest to Google Places API
+                    val request = FindAutocompletePredictionsRequest.builder()
+                        .setQuery(query)
+                        .setTypeFilter(TypeFilter.ADDRESS)
+                        .build()
+
+                    placesClient.findAutocompletePredictions(request)
+                        .addOnSuccessListener { response ->
+                            val predictionList: MutableList<String> = ArrayList()
+                            for (prediction in response.autocompletePredictions) {
+                                predictionList.add(prediction.getFullText(null).toString())
+                            }
+
+                            locationList.clear()
+                            locationList.addAll(predictionList)
+                            loadingProgressBar.visibility = View.GONE
+                            locationAdapter.notifyDataSetChanged()
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle failure, if any
+                            Toast.makeText(
+                                applicationContext,
+                                "Location Retrieval Failed!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+            })
         }
     }
 
@@ -164,7 +264,8 @@ class DiaryActivity : AppCompatActivity() {
                     .show()
             } else {
                 try {
-                    imageFile = data.data?.let { ProcessAndroidUri.from(applicationContext, it) }
+                    imageFile =
+                        data.data?.let { ProcessAndroidUri.from(applicationContext, it) }
                     if (imageFile?.length()!! < 1) return
                     val diaryEntryImage =
                         imageFile?.absolutePath?.let {
@@ -190,7 +291,8 @@ class DiaryActivity : AppCompatActivity() {
 
     private fun handleSaveDiaryEntry() {
         if (titleEditText.text.toString().isEmpty()) {
-            Toast.makeText(applicationContext, "Title must not be empty!", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "Title must not be empty!", Toast.LENGTH_LONG)
+                .show()
         } else if (entryBodyEditText.text.toString().isEmpty()) {
             Toast.makeText(applicationContext, "Enter notes!", Toast.LENGTH_LONG).show()
         } else {
