@@ -41,14 +41,14 @@ This project makes use of the following tools and dependencies:
 4. Build and run the app on your emulator or physical device.
 5. Explore the app's features and start documenting your travel memories!
 
+## Screenshots
+A few screenshots of the app in action:
+<img src="assets/1.png" alt="Screenshot 1">
+<img src="assets/2.png" alt="Screenshot 2">
 
 ## Issues
 If you encounter any issues while using this app, please open an issue on this repository and I will be happy to assist you.
 
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
-Made with ❤️ by Lynne Munini
