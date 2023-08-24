@@ -75,7 +75,7 @@ class DiaryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Places.initialize(applicationContext, "API_KEY")
+        Places.initialize(applicationContext, "")
         setContentView(R.layout.activity_diary_layout)
         initializeResources()
         loadData()
