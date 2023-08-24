@@ -1,6 +1,6 @@
 # Travel Diary App
 
-Welcome to the Travel Diary App! This mobile application allows users to document their travel experiences by creating diary entries enriched with photos, notes, and location information. It provides a platform for users to relive their adventures and share them with the world. 🌍📔✈️
+Welcome to the Travel Diary App! This mobile application allows users to document their travel experiences by creating diary entries enriched with photos, notes, and location information.
 
 ## Features
 
@@ -13,7 +13,7 @@ Welcome to the Travel Diary App! This mobile application allows users to documen
 
 - **Location Integration:** Places API has been integrated to provide location suggestions and autocomplete functionality.
 
-- **Offline Support:** Room Persistence Library has been integrated to provide robust local data storage.
+- **Offline Support:** Room database has been implemented to provide robust local data storage.
 
 
 ## Tools and Dependencies
