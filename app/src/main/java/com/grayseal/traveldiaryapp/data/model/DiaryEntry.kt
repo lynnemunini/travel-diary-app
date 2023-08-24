@@ -7,6 +7,15 @@ import java.util.Calendar
 import java.util.UUID
 
 
+/**
+ * Represents a Diary Entry entity stored in the database.
+ *
+ * @param id Unique identifier for the Diary Entry, generated using UUID.
+ * @param title Title of the Diary Entry.
+ * @param date Date associated with the Diary Entry. Defaults to the current time.
+ * @param location Location associated with the Diary Entry.
+ * @param notes Notes or content of the Diary Entry.
+ */
 @Entity(tableName = "diary_entries")
 data class DiaryEntry(
     @PrimaryKey

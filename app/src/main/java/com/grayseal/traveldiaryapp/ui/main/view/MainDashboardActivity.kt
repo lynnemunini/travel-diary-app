@@ -97,15 +97,28 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         sortMenuIcon.setOnClickListener { v -> showContextMenu(v) }
     }
 
+    /**
+     * Loads diary entries and associated photos from the ViewModel and updates the UI.
+     */
     private fun loadData() {
+        // Display the loading progress bar
         statusProgressBar.visibility = View.VISIBLE
+
+        // Load diary entries from the DiaryEntryViewModel and update the UI
         lifecycleScope.launch {
             diaryEntryViewModel.getAllEntries().collect { diaryEntries ->
-                entries.clear() // Clear the existing list
+                // Clear the existing list of entries
+                entries.clear()
                 statusProgressBar.visibility = View.GONE
-                entries.addAll(diaryEntries) // Add the collected entries
+                entries.addAll(diaryEntries)
+
+                // Notify the adapter of the data change
                 diaryListAdapter.notifyDataSetChanged()
+
+                // Update the searchable list in the adapter
                 diaryListAdapter.updateSearchableList(entries)
+
+                // Adjust visibility of UI elements based on data availability
                 if (entries.isNotEmpty()) {
                     noDataView.visibility = View.GONE
                     diaryEntriesListRecyclerView.visibility = View.VISIBLE
@@ -115,8 +128,11 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
                 }
             }
         }
+
+        // Load photos from the PhotoViewModel and update the UI
         lifecycleScope.launch {
             photoViewModel.getAllEntries().collect { photos ->
+                // Clear the existing list of images
                 images.clear()
                 images.addAll(photos)
                 diaryListAdapter.notifyDataSetChanged()
@@ -124,6 +140,13 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         }
     }
 
+
+    /**
+     * EventBus subscriber method to handle empty search result event.
+     * Adjusts the visibility of the diaryEntriesListRecyclerView based on search result emptiness.
+     *
+     * @param event The empty search result event containing a boolean flag indicating emptiness.
+     */
     @Subscribe
     fun emptySearchResultEvent(event: SearchResultEvent) {
         if (event.isEmpty) {
@@ -133,10 +156,20 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
         }
     }
 
+    /**
+     * Displays a context menu for sorting diary entries and handles menu item clicks.
+     *
+     * @param view The view that triggers the context menu.
+     */
     private fun showContextMenu(view: View) {
+        // Create a PopupMenu anchored to the provided view
         val popup = PopupMenu(this, view, Gravity.END)
+
+        // Inflate the sort_menu layout into the popup menu
         val inflater: MenuInflater = popup.menuInflater
         inflater.inflate(R.menu.sort_menu, popup.menu)
+
+        // Set a listener to handle menu item clicks
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_sort_by_date -> {
@@ -148,6 +181,8 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
                         val date2 = dateFormat.parse(entry2.date)
                         date2!!.compareTo(date1!!)
                     }
+
+                    // Notify the adapter of the data change and return true
                     diaryListAdapter.notifyDataSetChanged()
                     true
                 }
@@ -155,6 +190,8 @@ class MainDashboardActivity : AppCompatActivity(), DiaryListAdapter.OnEntryClick
                 else -> false
             }
         }
+
+        // Show the context menu
         popup.show()
     }
 

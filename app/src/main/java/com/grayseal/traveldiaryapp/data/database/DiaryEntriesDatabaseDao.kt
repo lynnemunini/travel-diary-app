@@ -9,31 +9,56 @@ import androidx.room.Update
 import com.grayseal.traveldiaryapp.data.model.DiaryEntry
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Data Access Object (DAO) interface for Diary Entry data.
+ */
 @Dao
 interface DiaryEntriesDatabaseDao {
 
-    /*Return list of diary entries from database*/
+    /**
+     * Retrieves a list of all Diary Entries from the database.
+     *
+     * @return A Flow of a list of DiaryEntry objects.
+     */
     @Query("SELECT * from diary_entries")
-    fun getDiaryEntries():
-            Flow<List<DiaryEntry>>
+    fun getDiaryEntries(): Flow<List<DiaryEntry>>
 
-    /*Return diaryEntry with a specific id*/
-    @Query("SELECT * from diary_entries where id =:id")
+    /**
+     * Retrieves a specific Diary Entry by its ID.
+     *
+     * @param id The ID of the Diary Entry to retrieve.
+     * @return A Flow of the requested DiaryEntry object.
+     */
+    @Query("SELECT * from diary_entries where id = :id")
     fun getDiaryEntryById(id: String): Flow<DiaryEntry>
 
-    /*Insert an entry to database. If there's any conflict or errors it's replaced with new one*/
+    /**
+     * Inserts a new Diary Entry into the database or replaces an existing entry if a conflict occurs.
+     *
+     * @param diaryEntry The Diary Entry object to insert or replace.
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(diaryEntry: DiaryEntry)
 
-    /*Update*/
+    /**
+     * Updates an existing Diary Entry in the database.
+     *
+     * @param diaryEntry The Diary Entry object to update.
+     */
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(diaryEntry: DiaryEntry)
 
-    /*Delete All*/
+    /**
+     * Deletes all Diary Entries from the database.
+     */
     @Query("DELETE from diary_entries")
     suspend fun deleteAll()
 
-    /*Delete an entry*/
+    /**
+     * Deletes a specific Diary Entry from the database.
+     *
+     * @param diaryEntry The Diary Entry object to delete.
+     */
     @Delete
     suspend fun deleteDiaryEntry(diaryEntry: DiaryEntry)
 }

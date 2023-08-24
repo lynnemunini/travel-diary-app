@@ -8,18 +8,33 @@ import androidx.room.Query
 import com.grayseal.traveldiaryapp.data.model.Photo
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Data Access Object (DAO) interface for Photo data.
+ */
 @Dao
 interface PhotoDatabaseDao {
-    /*Return list of photos from database*/
-    @Query("SELECT * from photos")
-    fun getPhotoEntries():
-            Flow<List<Photo>>
 
-    /*Insert an entry to database. If there's any conflict or errors it's replaced with new one*/
+    /**
+     * Retrieves a list of all Photos from the database.
+     *
+     * @return A Flow of a list of Photo objects.
+     */
+    @Query("SELECT * from photos")
+    fun getPhotoEntries(): Flow<List<Photo>>
+
+    /**
+     * Inserts a new Photo into the database or replaces an existing entry if a conflict occurs.
+     *
+     * @param photo The Photo object to insert or replace.
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(photo: Photo)
 
-    /*Delete an entry*/
+    /**
+     * Deletes a specific Photo from the database.
+     *
+     * @param photo The Photo object to delete.
+     */
     @Delete
     suspend fun deletePhoto(photo: Photo)
 }

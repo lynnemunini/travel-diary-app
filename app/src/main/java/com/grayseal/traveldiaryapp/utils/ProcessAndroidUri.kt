@@ -46,7 +46,7 @@ object ProcessAndroidUri {
      * @param fileName The input file name.
      * @return An array containing the base name and extension.
      */
-    fun splitFileName(fileName: String): Array<String> {
+    private fun splitFileName(fileName: String): Array<String> {
         val lastDotIndex = fileName.lastIndexOf(".")
         return if (lastDotIndex != -1) {
             arrayOf(fileName.substring(0, lastDotIndex), fileName.substring(lastDotIndex))
@@ -62,7 +62,7 @@ object ProcessAndroidUri {
      * @param uri The Android content URI.
      * @return The display name of the content represented by the URI.
      */
-    fun getFileName(context: Context, uri: Uri): String {
+    private fun getFileName(context: Context, uri: Uri): String {
         val displayNameColumnIndex = context.contentResolver.query(
             uri, null, null, null, null
         )?.use { cursor ->

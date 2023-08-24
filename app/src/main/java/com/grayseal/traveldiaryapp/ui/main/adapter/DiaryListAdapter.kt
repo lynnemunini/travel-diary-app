@@ -16,6 +16,14 @@ import com.grayseal.traveldiaryapp.ui.main.eventbus.SearchResultEvent
 import org.greenrobot.eventbus.EventBus
 import java.util.Locale
 
+/**
+ * Adapter class for displaying a list of diary entries in a RecyclerView.
+ *
+ * @param context The context in which the adapter is used.
+ * @param entryList The list of diary entries to be displayed.
+ * @param imagesList The list of associated images for each diary entry.
+ * @param onEntryClickedListener The listener for handling entry click events.
+ */
 @SuppressLint("NotifyDataSetChanged")
 class DiaryListAdapter(
     private val context: Context,
@@ -115,6 +123,12 @@ class DiaryListAdapter(
         searchableCopy.addAll(journals!!)
     }
 
+    /**
+     * ViewHolder class for holding views associated with each item in the RecyclerView.
+     *
+     * @param itemView The view representing the item.
+     * @param entryClickedListener The listener for entry click events.
+     */
     inner class ViewHolder(itemView: View, entryClickedListener: OnEntryClickedListener) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val container: MaterialCardView
@@ -141,7 +155,15 @@ class DiaryListAdapter(
         }
     }
 
+    /**
+     * Listener interface for handling entry click events.
+     */
     interface OnEntryClickedListener {
+        /**
+         * Callback method when an entry is clicked.
+         *
+         * @param position The position of the clicked entry.
+         */
         fun onEntryClicked(position: Int)
     }
 }

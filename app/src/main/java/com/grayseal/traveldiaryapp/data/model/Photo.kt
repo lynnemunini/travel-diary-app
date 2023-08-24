@@ -5,6 +5,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.UUID
 
+/**
+ * Represents a Photo entity stored in the database, associated with a Diary Entry.
+ *
+ * @param id Unique identifier for the Photo, generated using UUID.
+ * @param diaryEntryId ID of the Diary Entry associated with this Photo.
+ * @param absolutePath Absolute path to the photo file.
+ */
 @Entity(tableName = "photos")
 data class Photo(
     @PrimaryKey

@@ -1,6 +1,5 @@
 package com.grayseal.traveldiaryapp.ui.main.view
 
-import LocationAdapter
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -31,6 +30,7 @@ import com.grayseal.traveldiaryapp.R
 import com.grayseal.traveldiaryapp.data.model.DiaryEntry
 import com.grayseal.traveldiaryapp.data.model.Photo
 import com.grayseal.traveldiaryapp.ui.main.adapter.ImagesListAdapter
+import com.grayseal.traveldiaryapp.ui.main.adapter.LocationAdapter
 import com.grayseal.traveldiaryapp.ui.main.viewmodel.DiaryEntryViewModel
 import com.grayseal.traveldiaryapp.ui.main.viewmodel.PhotoViewModel
 import com.grayseal.traveldiaryapp.utils.ProcessAndroidUri
@@ -171,31 +171,51 @@ class DiaryActivity : AppCompatActivity() {
             // Initialize the Places SDK client
             val placesClient: PlacesClient = Places.createClient(this)
 
+            /**
+             * TextWatcher implementation to observe changes in the location name input field.
+             */
             locationNameEditText.addTextChangedListener(object : TextWatcher {
+                /**
+                 * This method is called after the text within the location name input field has changed.
+                 * It triggers the Google Places API to retrieve autocomplete predictions based on the input.
+                 *
+                 * @param s The editable text after the change.
+                 */
                 override fun afterTextChanged(s: Editable?) {
+                    // Get the input query from the editable text
                     val query = s.toString()
+
+                    // Display the loading progress bar
                     loadingProgressBar.visibility = View.VISIBLE
 
-                    // Make a FindAutocompletePredictionsRequest to Google Places API
+                    // Build a FindAutocompletePredictionsRequest for the Google Places API
                     val request = FindAutocompletePredictionsRequest.builder()
                         .setQuery(query)
                         .setTypeFilter(TypeFilter.ADDRESS)
                         .build()
 
+                    // Use the PlacesClient to fetch autocomplete predictions
                     placesClient.findAutocompletePredictions(request)
                         .addOnSuccessListener { response ->
+                            // Create a list to hold autocomplete prediction strings
                             val predictionList: MutableList<String> = ArrayList()
+
+                            // Iterate through the response's autocomplete predictions
                             for (prediction in response.autocompletePredictions) {
+                                // Add each prediction's full text to the list
                                 predictionList.add(prediction.getFullText(null).toString())
                             }
 
+                            // Clear and update the location list with the predictions
                             locationList.clear()
                             locationList.addAll(predictionList)
+
+                            // Hide the loading progress bar and notify the location adapter of data change
                             loadingProgressBar.visibility = View.GONE
                             locationAdapter.notifyDataSetChanged()
                         }
                         .addOnFailureListener { exception ->
-                            // Handle failure, if any
+                            // Handle failure by displaying an error toast with the exception message
                             Toast.makeText(
                                 applicationContext,
                                 "$exception",
@@ -210,35 +230,52 @@ class DiaryActivity : AppCompatActivity() {
                     count: Int,
                     after: Int
                 ) {
+                    // No action needed before text changes
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // No action needed while text is changing
                 }
             })
+
         }
     }
 
+    /**
+     * Loads data related to the diary entry when viewing it in detailed mode.
+     */
     private fun loadData() {
+        // Check if the activity was launched in detailed view mode
         if (intent.getBooleanExtra(IS_VIEW_DETAILED, false)) {
+            // Retrieve the diary entry ID from the intent's extra
             diaryEntryID = intent.getStringExtra(ENTRY_ID_TAG_KEY).toString()
 
+            // Use a lifecycleScope to launch coroutine for retrieving diary entry details
             lifecycleScope.launch {
+                // Collect and observe changes in the diary entry with the specified ID
                 diaryEntryViewModel.getEntryById(diaryEntryID).collect { fetchedDiaryEntry ->
+                    // Update UI elements with the fetched diary entry details
                     diaryEntry = fetchedDiaryEntry
                     titleEditText.setText(fetchedDiaryEntry.title)
                     entryBodyEditText.setText(fetchedDiaryEntry.notes)
                     dateTextView.text = fetchedDiaryEntry.date
                     locationTextView.text = fetchedDiaryEntry.location
+                    locationName = fetchedDiaryEntry.location
                 }
             }
 
+            // Use a lifecycleScope to launch coroutine for retrieving associated photos
             lifecycleScope.launch {
+                // Collect and observe changes in all photo entries
                 photoViewModel.getAllEntries().collect { photos ->
-                    photos.filter { it.diaryEntryId == diaryEntryID }
+                    // Filter photos based on the current diary entry ID
+                    val filteredPhotos = photos.filter { it.diaryEntryId == diaryEntryID }
+
+                    // Clear the existing list and update UI to show captured images
                     imageFilesList.clear()
-                    capturedImagesContainerView.visibility = View.VISIBLE
-                    imageFilesList.addAll(photos)
+                    imageFilesList.addAll(filteredPhotos)
                     imagesListAdapter.notifyDataSetChanged()
+                    capturedImagesContainerView.visibility = View.VISIBLE
                 }
             }
         }
@@ -257,39 +294,58 @@ class DiaryActivity : AppCompatActivity() {
         startActivityForResult(chooser, GET_CONTENT_FROM_FILE_REQUEST_CODE)
     }
 
+    /**
+     * Callback method triggered when an activity launched for result returns with a result.
+     *
+     * @param requestCode The integer request code originally supplied when launching the activity.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can carry data returned by the child activity.
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // Hide the progress bar indicating image capture process is done
         progressBar.visibility = View.GONE
+
+        // Call the superclass implementation of the method
         super.onActivityResult(requestCode, resultCode, data)
+
+        // Check if the returned result is from the image capture request
         if (requestCode == GET_CONTENT_FROM_FILE_REQUEST_CODE) {
             if (data == null) {
+                // If no data was returned, display a message indicating image capture failure
                 Toast.makeText(applicationContext, "Image capture failed!", Toast.LENGTH_LONG)
                     .show()
             } else {
                 try {
-                    imageFile =
-                        data.data?.let { ProcessAndroidUri.from(applicationContext, it) }
-                    if (imageFile?.length()!! < 1) return
-                    val diaryEntryImage =
-                        imageFile?.absolutePath?.let {
-                            Photo(
-                                id = UUID.randomUUID().toString(),
-                                diaryEntryId = diaryEntryID,
-                                it
-                            )
-                        }
+                    // Retrieve the image file URI from the returned intent
+                    imageFile = data.data?.let { ProcessAndroidUri.from(applicationContext, it) }
 
-                    // Store the image
+                    // Check if the image file exists and has a valid length
+                    if (imageFile?.length()!! < 1) return
+
+                    // Create a Photo object to store the captured image information
+                    val diaryEntryImage = imageFile?.absolutePath?.let {
+                        Photo(
+                            id = UUID.randomUUID().toString(),
+                            diaryEntryId = diaryEntryID,
+                            it
+                        )
+                    }
+
+                    // Store the image using the PhotoViewModel
                     diaryEntryImage?.let { photoViewModel.addEntry(diaryEntryImage) }
 
+                    // Show the captured images container and update the list
                     capturedImagesContainerView.visibility = View.VISIBLE
                     diaryEntryImage?.let { imageFilesList.add(it) }
                     imagesListAdapter.notifyDataSetChanged()
                 } catch (e: IOException) {
+                    // Handle any exceptions that occur during image processing
                     e.printStackTrace()
                 }
             }
         }
     }
+
 
     private fun handleSaveDiaryEntry() {
         if (titleEditText.text.toString().isEmpty()) {
