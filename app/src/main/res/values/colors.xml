@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#f6932a</color>
     <color name="accentColor">#f6932a</color>
     <color name="primaryTextColor">#000000</color>
     <color name="secondaryTextColor">#7f7f7f</color>
     <color name="primaryBackgroundColor">#ffffff</color>
-    <color name="secondaryBackgroundColor">#F5F5F5</color>
-    <color name="error_red">#FFFA1616</color>
 </resources>
