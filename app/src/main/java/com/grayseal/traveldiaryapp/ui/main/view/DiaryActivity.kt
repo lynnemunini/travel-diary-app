@@ -26,6 +26,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.grayseal.traveldiaryapp.BuildConfig
 import com.grayseal.traveldiaryapp.R
 import com.grayseal.traveldiaryapp.data.model.DiaryEntry
 import com.grayseal.traveldiaryapp.data.model.Photo
@@ -75,7 +76,7 @@ class DiaryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Places.initialize(applicationContext, "")
+        Places.initialize(applicationContext, BuildConfig.MAPS_API_KEY)
         setContentView(R.layout.activity_diary_layout)
         initializeResources()
         loadData()
