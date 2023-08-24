@@ -43,7 +43,6 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 
-
 @SuppressLint("NotifyDataSetChanged")
 @AndroidEntryPoint
 class DiaryActivity : AppCompatActivity() {
@@ -72,10 +71,11 @@ class DiaryActivity : AppCompatActivity() {
     private var diaryEntry: DiaryEntry? = null
     private val imageFilesList: MutableList<Photo> = ArrayList()
     private val locationList: MutableList<String> = ArrayList()
+    private var locationName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Places.initialize(applicationContext, "BuildConfig.MAPS_API_KEY")
+        Places.initialize(applicationContext, "API_KEY")
         setContentView(R.layout.activity_diary_layout)
         initializeResources()
         loadData()
@@ -158,6 +158,7 @@ class DiaryActivity : AppCompatActivity() {
                 LocationAdapter(locationList, object : LocationAdapter.OnLocationClickedListener {
                     override fun onLocationClicked(position: Int) {
                         locationTextView.text = locationList[position]
+                        locationName = locationList[position]
                         locationDialog.dismiss()
                     }
                 })
@@ -197,7 +198,7 @@ class DiaryActivity : AppCompatActivity() {
                             // Handle failure, if any
                             Toast.makeText(
                                 applicationContext,
-                                "Location Retrieval Failed!",
+                                "$exception",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -227,6 +228,7 @@ class DiaryActivity : AppCompatActivity() {
                     titleEditText.setText(fetchedDiaryEntry.title)
                     entryBodyEditText.setText(fetchedDiaryEntry.notes)
                     dateTextView.text = fetchedDiaryEntry.date
+                    locationTextView.text = fetchedDiaryEntry.location
                 }
             }
 
@@ -300,7 +302,7 @@ class DiaryActivity : AppCompatActivity() {
                 diaryEntryID,
                 titleEditText.text.toString(),
                 dateTextView.text.toString(),
-                "",
+                locationName,
                 entryBodyEditText.text.toString()
             )
             diaryEntry?.let { entry ->
